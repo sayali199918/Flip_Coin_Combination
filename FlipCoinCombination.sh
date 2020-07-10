@@ -17,11 +17,15 @@ case $choice in
 			dict[T]=$(( ${dict[T]} + 1 ))
 		fi
 	done
-	echo ${dict[H]}  ${dict[T]}
-	percentage=`echo ${dict[H]} $n | awk '{print ($1/$2)*1oo}'`
-	echo "H:" $percentage"%"
-	percentage=`echo ${dict[T]} $n | awk '{print ($1/$2)*1oo}'`
-	echo "T:" $percentage"%"
+	echo "H:" ${dict[H]}   "T:" ${dict[T]}
+	if [[ ${dict[H]} -gt ${dict[T]} ]]
+	then
+		dict[percentage]=`echo ${dict[H]} $n | awk '{print (100*$1/$2)}'`
+		echo "H is the winner and winning percentage is:" ${dict[percentage]}"%"
+	else
+		dict[percentage]=`echo ${dict[T]} $n | awk '{print (100*$1/$2)}'`
+		echo "T is the winner and winning percentage is:" ${dict[percentage]}"%"
+	fi
 	;;
 	2)
 	for((i=0; i<$n; i++))
@@ -34,15 +38,18 @@ case $choice in
 				4) dict[TT]=$(( ${dict[TT]} + 1 ));;
 		esac
 	done
-	echo ${dict[HH]}  ${dict[HT]} ${dict[TH]} ${dict[TT]}
-        percentage=`echo ${dict[HH]} $n | awk '{print ($1/$2)*1oo}'`
-        echo "HH:" $percentage"%"
-        percentage=`echo ${dict[HT]} $n | awk '{print ($1/$2)*1oo}'`
-        echo "HT:" $percentage"%"
-        percentage=`echo ${dict[TH]} $n | awk '{print ($1/$2)*1oo}'`
-        echo "TH:" $percentage"%"
-        percentage=`echo ${dict[TT]} $n | awk '{print ($1/$2)*1oo}'`
-        echo "TT:" $percentage"%"
+	 echo "HH:" ${dict[HH]}   "HT:" ${dict[HT]}  "TH:" ${dict[TH]}  "TT:" ${dict[TT]}
+	temp=$((${dict[HH]}))
+	for i in ${!dict[@]}
+	do
+		if [[ ${dict[$i]} -ge $temp ]]
+		then
+			temp=$((${dict[$i]}))
+			val=$i
+		fi
+	done
+        dict[percentage]=`echo $temp $n | awk '{print (100*$1/$2)}'`
+        echo "$val is the winning combination and winning percentage is:" ${dict[percentage]}"%"
 	;;
 	3)
 	for((i=0; i<$n; i++))
@@ -61,22 +68,17 @@ case $choice in
                 esac
         done
         echo "HHH:" ${dict[HHH]}   "HHT:" ${dict[HHT]}  "HTH:" ${dict[HTH]}   "HTT:" ${dict[HTT]}  "TTT:" ${dict[TTT]}  "TTH:" ${dict[TTH]}  "THT:" ${dict[THT]}  "THH:" ${dict[THH]}
-        percentage=`echo ${dict[HHH]} $n | awk '{print ($1/$2)*1oo}'`
-        echo "HHH:" $percentage"%"
-        percentage=`echo ${dict[HHT]} $n | awk '{print ($1/$2)*1oo}'`
-        echo "HHT:" $percentage"%"
-        percentage=`echo ${dict[HTH]} $n | awk '{print ($1/$2)*1oo}'`
-        echo "HTH:" $percentage"%"
-        percentage=`echo ${dict[HTT]} $n | awk '{print ($1/$2)*1oo}'`
-        echo "HTT:" $percentage"%"
-	percentage=`echo ${dict[TTT]} $n | awk '{print ($1/$2)*1oo}'`
-        echo "TTT:" $percentage"%"
-        percentage=`echo ${dict[TTH]} $n | awk '{print ($1/$2)*1oo}'`
-        echo "TTH:" $percentage"%"
-        percentage=`echo ${dict[THT]} $n | awk '{print ($1/$2)*1oo}'`
-        echo "THT:" $percentage"%"
-        percentage=`echo ${dict[THH]} $n | awk '{print ($1/$2)*1oo}'`
-        echo "THH:" $percentage"%"
+	temp=$((${dict[HHH]}))
+	for i in ${!dict[@]}
+	do
+		if [[ ${dict[$i]} -ge $temp ]]
+	then
+		temp=$((${dict[$i]}))
+		val=$i
+		fi
+	done
+        dict[percentage]=`echo $temp $n | awk '{print (100*$1/$2)}'`
+        echo "$val is the winning combination and winning percentage is :" ${dict[percentage]}"%"
 	;;
 esac
 
