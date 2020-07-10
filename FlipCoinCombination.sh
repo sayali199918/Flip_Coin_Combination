@@ -3,6 +3,18 @@ echo "Welcome to flip Coin Combination Program"
 declare -A dict
 read -p "Enter the number of times you want to flip a coin:" n
 echo $n
+function sort () {
+	for i in ${!dict[@]}
+        do
+                if [[ ${dict[$i]} -ge $temp ]]
+        then
+                temp=$((${dict[$i]}))
+                val=$i
+                fi
+        done
+        dict[percentage]=`echo $temp $n | awk '{print (100*$1/$2)}'`
+        echo "$val is the winning combination and winning percentage is :" ${dict[percentage]}"%"
+}
 echo "1.Single Combination\n2.Double Combination\n3.Triple Combination"
 read -p "Enter your choice:" choice
 case $choice in
@@ -40,16 +52,7 @@ case $choice in
 	done
 	 echo "HH:" ${dict[HH]}   "HT:" ${dict[HT]}  "TH:" ${dict[TH]}  "TT:" ${dict[TT]}
 	temp=$((${dict[HH]}))
-	for i in ${!dict[@]}
-	do
-		if [[ ${dict[$i]} -ge $temp ]]
-		then
-			temp=$((${dict[$i]}))
-			val=$i
-		fi
-	done
-        dict[percentage]=`echo $temp $n | awk '{print (100*$1/$2)}'`
-        echo "$val is the winning combination and winning percentage is:" ${dict[percentage]}"%"
+	sort
 	;;
 	3)
 	for((i=0; i<$n; i++))
@@ -69,16 +72,7 @@ case $choice in
         done
         echo "HHH:" ${dict[HHH]}   "HHT:" ${dict[HHT]}  "HTH:" ${dict[HTH]}   "HTT:" ${dict[HTT]}  "TTT:" ${dict[TTT]}  "TTH:" ${dict[TTH]}  "THT:" ${dict[THT]}  "THH:" ${dict[THH]}
 	temp=$((${dict[HHH]}))
-	for i in ${!dict[@]}
-	do
-		if [[ ${dict[$i]} -ge $temp ]]
-	then
-		temp=$((${dict[$i]}))
-		val=$i
-		fi
-	done
-        dict[percentage]=`echo $temp $n | awk '{print (100*$1/$2)}'`
-        echo "$val is the winning combination and winning percentage is :" ${dict[percentage]}"%"
+	sort
 	;;
 esac
 
